@@ -6,29 +6,23 @@
     "strict": true,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
+
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
     "types": [
       "node"
     ],
+
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
     "outDir": "./dist",
 
-		"baseUrl": "src",
+		"baseUrl": "src/",
 		"paths": {
-			"@/*": ["src/*"]
-		}
-
-    // "target": "ESNext",
-    // "module": "ESNext",
-    // "moduleResolution": "Node",
-    // "baseUrl": ".",
-    // "paths": {
-    //   "@/*": ["src/*"]
-    // },
-    // "strict": true,
-    // "esModuleInterop": true,
-    // "skipLibCheck": true
-
+			"@/*": ["*"],
+      "auth/*": ["auth/*"]
+		},
   },
   "include": ["src"],
   "exclude": ["node_modules"],

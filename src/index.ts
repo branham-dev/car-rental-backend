@@ -2,6 +2,7 @@ import { serve } from '@hono/node-server'
 import { error } from 'console'
 import initializeConnection from 'database/dbconfig.js'
 import { Hono, type Context } from 'hono'
+import authRoute from '@/authentication/auth.route.js'
 
 
 
@@ -16,6 +17,8 @@ app.get('/', (c: Context) => {
 app.notFound((c: Context) => {
   return c.json({ success: false, message: "Route not found", path: c.req.path }, 404);
 });
+
+app.route('/auth', authRoute)
 
 
 initializeConnection().then(() => {
