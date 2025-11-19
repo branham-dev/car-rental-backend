@@ -1,15 +1,33 @@
 import { serve } from '@hono/node-server'
-import { Hono } from 'hono'
+import { error } from 'console'
+import initializeConnection from 'database/dbconfig.js'
+import { Hono, type Context } from 'hono'
+
+
+
+
 
 const app = new Hono()
 
-app.get('/', (c) => {
+app.get('/', (c: Context) => {
   return c.text('Hello Hono!')
 })
 
-serve({
-  fetch: app.fetch,
-  port: 3000
-}, (info) => {
-  console.log(`Server is running on http://localhost:${info.port}`)
+app.notFound((c: Context) => {
+  return c.json({ success: false, message: "Route not found", path: c.req.path }, 404);
+});
+
+
+initializeConnection().then(() => {
+  serve({
+    fetch: app.fetch,
+    port: 3100
+  }, (info) => {
+    console.log(`Server is running on http://localhost:${info.port}`)
+  })
+}).catch((error) => {
+  console.error(`Failed to initialize database connection`, error);
 })
+
+
+
