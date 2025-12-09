@@ -37,7 +37,7 @@ export const loginUser = async (loginUser: LoginUser): Promise<unknown | undefin
   const { email } = loginUser
   const database = getConnectionPool()
   const query = /*sql*/ `
-    SELECT user_id, first_name, last_name, email, password, role
+    SELECT user_id, first_name, last_name, email, password, role, profile_image
     FROM crs.users
     WHERE email = @email
   `
@@ -45,3 +45,11 @@ export const loginUser = async (loginUser: LoginUser): Promise<unknown | undefin
   console.log(response.recordset[0]);
   return response.recordset[0]
 }
+
+export const updateProfileImage = async (userId: string, url: string) => {
+  const db = getConnectionPool();
+  await db.request()
+    .input("userId", userId)
+    .input("url", url)
+    .query(`UPDATE crs.users SET profile_image = @url WHERE user_id = @userId`);
+};

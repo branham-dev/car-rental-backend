@@ -5,6 +5,8 @@ import { AppError } from "@/utilities/App.Error.js";
 import { camelCaseKey, isObject } from "@/utilities/functions.js";
 import jwtAuth from "jsonwebtoken";
 import dotenv from "dotenv";
+import path from "path";
+import fs from "fs";
 
 dotenv.config();
 
@@ -44,6 +46,7 @@ type LoginResponse = {
   email: string;
   password: string;
   role: string;
+  profileImage: string;
 }
 
 type AuthResponse = {
@@ -52,6 +55,7 @@ type AuthResponse = {
     name: string;
     email: string;
     role: string;
+    profileImage: string;
   }
 }
 
@@ -60,7 +64,10 @@ export const registerUser = async (newUser: NewUser): Promise<boolean> => {
   try {
     const parsedUser = registerSchema.parse(newUser);
     const passwordHash = await bcrypt.hash(parsedUser.password, 12);
+
     const userData = { ...parsedUser, password: passwordHash }
+
+
     const response = await AuthModel.registerUser(userData);
     if (response === 1) {
       return true
@@ -89,7 +96,9 @@ export const loginUser = async (loginUser: LoginUser) => {
     if (!passwordMatch) {
       throw new AppError("Invalid credentials", 401, "INCORRECT_PASSWORD", false);
     }
-    const { userId, firstName, lastName, email, role } = userData
+    const { password, ...cleanUser } = userData;
+
+    const { userId, firstName, lastName, email, role, profileImage } = cleanUser
 
     const userSign: Token = {
       id: userId,
@@ -105,7 +114,8 @@ export const loginUser = async (loginUser: LoginUser) => {
       details: {
         name: `${firstName} ${lastName}`,
         email: email,
-        role: role
+        role: role,
+        profileImage: profileImage,
       }
     }
 
@@ -117,3 +127,23 @@ export const loginUser = async (loginUser: LoginUser) => {
   }
 
 }
+
+export const uploadProfileImage = async (userId: string, file: any) => {
+  if (!file) throw new Error("No file provided");
+
+  // Use the existing file saved by middleware
+  const filename = Date.now() + path.extname(file.originalFilename);
+  const uploadFolder = path.join(process.cwd(), "uploads");
+  const filePath = path.join(uploadFolder, filename);
+
+  // Rename to new filename (optional)
+  fs.renameSync(file.filepath, filePath);
+
+  // Create public URL
+  const url = `http://localhost:3100/uploads/${filename}`;
+
+  // Save to database
+  await AuthModel.updateProfileImage(userId, url);
+
+  return url;
+};
