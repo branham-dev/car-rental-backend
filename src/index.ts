@@ -3,22 +3,63 @@ import { error } from 'console'
 import initializeConnection from 'database/dbconfig.js'
 import { Hono, type Context } from 'hono'
 import authRoute from '@/authentication/auth.route.js'
+import userRoute from '@/user/user.route.js'
+import { cors } from 'hono/cors'
+import { AppError } from './utilities/App.Error.js'
+import { generateResponse } from './utilities/functions.js'
+import specRoute from './specifications/spec.route.js'
+import vehicleRoute from './vehicles/vehicle.route.js'
+import bookingRoute from './bookings/booking.route.js'
+import { serveStatic } from '@hono/node-server/serve-static'
+import path from 'path'
+import fs from 'fs';
+import transactionRoute from './transactions/payment.route.js'
+
 
 
 
 
 
 const app = new Hono()
+app.use(cors())
+
+const uploadsDir = path.resolve('./uploads');
+if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+
+app.get('/uploads/*', serveStatic({
+  root: uploadsDir,
+  rewriteRequestPath: (path) => path.replace(/^\/uploads/, '') // remove /uploads
+}));
+
 
 app.get('/', (c: Context) => {
   return c.text('Hello Hono!')
 })
 
+
+
+
+
+
+app.onError((error, c) => {
+  console.log(error);
+  if (error instanceof AppError) {
+    return c.json(generateResponse(false, error.message, null, error.code,), 401)
+  }
+  return c.json(generateResponse(false, "An error occurred", null), 500)
+})
+
+app.route('/auth', authRoute);
+app.route('/api', userRoute);
+app.route('/api', specRoute);
+app.route('/api', vehicleRoute);
+app.route('/api', bookingRoute);
+app.route('/api', transactionRoute);
+
+
 app.notFound((c: Context) => {
   return c.json({ success: false, message: "Route not found", path: c.req.path }, 404);
 });
-
-app.route('/auth', authRoute)
 
 
 initializeConnection().then(() => {
@@ -31,6 +72,3 @@ initializeConnection().then(() => {
 }).catch((error) => {
   console.error(`Failed to initialize database connection`, error);
 })
-
-
-
