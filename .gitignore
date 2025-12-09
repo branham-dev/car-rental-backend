@@ -29,3 +29,4 @@ lerna-debug.log*
 
 bookingsArchive/
 new.d.ts
+app.yml

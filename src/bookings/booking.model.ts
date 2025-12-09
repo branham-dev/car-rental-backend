@@ -99,18 +99,18 @@ export const createBooking = async (booking: Booking) => {
 // Update an existing booking
 export const updateBooking = async (bookingId: string) => {
   const db = getConnectionPool();
-  const keys = Object.keys(payload);
-  if (keys.length === 0) return 0;
+  // const keys = Object.keys(payload);
+  // if (keys.length === 0) return 0;
 
   const setClauses: string[] = [];
   const request = db.request().input("bookingId", bookingId);
 
-  keys.forEach((k, idx) => {
-    const dbCol = k.replace(/[A-Z]/g, m => `_${m.toLowerCase()}`);
-    const param = `p${idx}`;
-    setClauses.push(`${dbCol} = @${param}`);
-    request.input(param, (payload as any)[k]);
-  });
+  // keys.forEach((k, idx) => {
+  //   const dbCol = k.replace(/[A-Z]/g, m => `_${m.toLowerCase()}`);
+  //   const param = `p${idx}`;
+  //   setClauses.push(`${dbCol} = @${param}`);
+  //   request.input(param, (payload as any)[k]);
+  // });
 
   const setSql = setClauses.join(", ");
   const query = /*sql*/ `
