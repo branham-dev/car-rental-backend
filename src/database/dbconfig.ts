@@ -26,7 +26,7 @@ export const Config = {
       idleTimeoutMillis: 30000,
     },
     options: {
-      encrypt: false,
+      encrypt: true,
       trustServerCertificate: true,
       enableArithAbort: true,
     },
