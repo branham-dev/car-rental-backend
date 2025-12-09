@@ -19,9 +19,14 @@ import transactionRoute from './transactions/payment.route.js'
 
 
 
-
 const app = new Hono()
-app.use(cors())
+
+app.use("*", cors({
+  origin: "http://localhost:5173",
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}))
 
 const uploadsDir = path.resolve('./uploads');
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
