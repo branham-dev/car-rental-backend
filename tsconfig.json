@@ -10,18 +10,18 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
 
+    "resolveJsonModule": true,
+
     "types": [
       "node"
     ],
 
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx",
     "outDir": "./dist",
+    "allowArbitraryExtensions": true,
 
-		"baseUrl": "src/",
+		"baseUrl": "src",
 		"paths": {
 			"@/*": ["*"],
-      "auth/*": ["auth/*"]
 		},
   },
   "include": ["src"],

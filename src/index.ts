@@ -1,5 +1,5 @@
 import { serve } from '@hono/node-server'
-import initializeConnection from 'database/dbconfig.js'
+import initializeConnection from '@/database/dbconfig.js';
 import { Hono, type Context } from 'hono'
 import authRoute from '@/authentication/auth.route.js'
 import userRoute from '@/user/user.route.js'
