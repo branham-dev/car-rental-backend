@@ -1,5 +1,4 @@
 import { serve } from '@hono/node-server'
-import { error } from 'console'
 import initializeConnection from 'database/dbconfig.js'
 import { Hono, type Context } from 'hono'
 import authRoute from '@/authentication/auth.route.js'
