@@ -14,10 +14,14 @@ import { serveStatic } from '@hono/node-server/serve-static'
 import path from 'path'
 import fs from 'fs';
 import transactionRoute from './transactions/payment.route.js'
+import dotenv from "dotenv";
+
+dotenv.config();
 
 
 
 
+const PORT = process.env.SOCKET ? parseInt(process.env.SOCKET) : 3000;
 
 const app = new Hono()
 
@@ -40,9 +44,6 @@ app.get('/uploads/*', serveStatic({
 app.get('/', (c: Context) => {
   return c.text('Hello Hono!')
 })
-
-
-
 
 
 
@@ -70,7 +71,7 @@ app.notFound((c: Context) => {
 initializeConnection().then(() => {
   serve({
     fetch: app.fetch,
-    port: 3100
+    port: PORT,
   }, (info) => {
     console.log(`Server is running on http://localhost:${info.port}`)
   })
