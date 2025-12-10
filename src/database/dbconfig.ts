@@ -3,29 +3,22 @@ import dotenv from "dotenv";
 import assert from "assert";
 dotenv.config();
 
-const { USER, PASSWORD, SERVER, PORT, DATABASE } = process.env;
+const { DB_USER, DB_PASSWORD, DB_SERVER, DB_PORT, CEDARBASE } = process.env;
 
-console.log("ENV VARS:", {
-  USER: process.env.USER,
-  PASSWORD: process.env.PASSWORD,
-  SERVER: process.env.SERVER,
-  PORT: process.env.PORT,
-  DATABASE: process.env.DATABASE,
-});
 
-assert(USER, "@user - false");
-assert(PASSWORD, "@password - false");
-assert(SERVER, "@server - false");
-assert(PORT, "@port - false");
-assert(DATABASE, "@database - false");
+assert(DB_USER, "@user - false");
+assert(DB_PASSWORD, "@password - false");
+assert(DB_SERVER, "@server - false");
+assert(DB_PORT, "@port - false");
+assert(CEDARBASE, "@database - false");
 
 export const Config = {
-  port: PORT,
+  port: DB_PORT,
   sqlConfig: {
-    user: USER,
-    password: PASSWORD,
-    server: SERVER,
-    database: DATABASE,
+    user: DB_USER,
+    password: DB_PASSWORD,
+    server: DB_SERVER,
+    database: CEDARBASE,
     connectionTimeout: 15000,
     requestTimeout: 15000,
     pool: {
