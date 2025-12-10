@@ -5,6 +5,14 @@ dotenv.config();
 
 const { USER, PASSWORD, SERVER, PORT, DATABASE } = process.env;
 
+console.log("ENV VARS:", {
+  USER: process.env.USER,
+  PASSWORD: process.env.PASSWORD,
+  SERVER: process.env.SERVER,
+  PORT: process.env.PORT,
+  DATABASE: process.env.DATABASE,
+});
+
 assert(USER, "@user - false");
 assert(PASSWORD, "@password - false");
 assert(SERVER, "@server - false");
