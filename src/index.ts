@@ -20,7 +20,7 @@ dotenv.config();
 
 
 
-const PORT = process.env.SOCKET ? parseInt(process.env.SOCKET) : 3000;
+const PORT = process.env.SOCKET ? parseInt(process.env.SOCKET) : 4600;
 
 const app = new Hono()
 
